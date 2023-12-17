@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useState,useEffect} from "react"
 
 function App() {
   const [products, setProducts] = useState(
@@ -8,7 +8,16 @@ function App() {
       {name: 'Product 3', price: 300},
     ]
   );
-  function addProduct(){
+  useEffect(() => {
+    console.log(products)
+    fetch('https://localhost:5000/api/Product')
+    .then(response => response.json())
+    //.then(data => console.log(data))
+    .then(data => setProducts(data))
+    
+  },[]) 
+
+  function addProduct(){  
     setProducts(
       prevState => 
       [...prevState, 
@@ -16,17 +25,16 @@ function App() {
     ])
   }
     
-
   return (
     <div className="app">
-      <h1>
+      <h1>Re-Store</h1>
       <ul>
-        {products.map((map, index)=>(
-          <li key={index}>{map.name} - {map.price}</li>
+        {products.map((item, index)=>(
+          <li key={index}>{item.name} - {item.price}</li>
         ))}       
       </ul>
       <button onClick={addProduct}>Add Product</button>
-      </h1>
+      
     </div>
   )
 }
